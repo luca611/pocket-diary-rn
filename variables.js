@@ -1,7 +1,7 @@
 // Description: This file contains the variables used in the application.
 
 var vars = {
-    isLogged: true,
+    isLogged: false,
     user: {
         name: '',
         email: '',

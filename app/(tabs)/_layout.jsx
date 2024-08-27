@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import RootLayout from '../(welcome&auth)/_layout'
+import RootLayout from '../_layout'
 import { vars } from '../../variables'
 import { Slot } from 'expo-router'
 import Home from './home'

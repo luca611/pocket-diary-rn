@@ -1,26 +1,21 @@
-import { StyleSheet, View } from 'react-native';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Index from './index';  
-import TabsLayout from '../(tabs)/_layout';
-import {vars} from '../../variables';
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { Slot } from 'expo-router'
 
-const RootLayout = () => {
-  if(vars.isLogged){
-    return <TabsLayout />
-  }
-  return (
-      <Index />
-  );
-};
+const _authLayout = () => {
+    return (
+        <View style={styles.fullScreen}>
+            <Slot />
+        </View>
+    )
+}
 
-export default RootLayout;
+export default _authLayout
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ff0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    fullScreen:{
+        width: Dimensions.get('screen').width,
+        height: Dimensions.get('screen').height,
+        backgroundColor:'#F2EDE5',
+    }
+})

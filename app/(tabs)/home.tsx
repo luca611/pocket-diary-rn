@@ -1,10 +1,12 @@
+import { router } from "expo-router";
 import { Text, View, StyleSheet } from "react-native";
+import { NativeViewGestureHandler, TouchableOpacity } from "react-native-gesture-handler";
 
 export default function Test() {
   return (
-    <View style={styles.container}>
-      <Text>This is the Home page.</Text>
-    </View>
+      <View style={styles.container}>
+        <Text>This is the Home page.</Text>
+      </View>
   );
 }
 

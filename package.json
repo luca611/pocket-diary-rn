@@ -17,6 +17,8 @@
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
     "@expo/vector-icons": "^14.0.2",
+    "@react-native-firebase/app": "^20.4.0",
+    "@react-native-firebase/firestore": "^20.4.0",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.11.0",
     "expo": "~51.0.28",

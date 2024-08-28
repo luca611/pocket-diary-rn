@@ -44,22 +44,24 @@ const Register = () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password)
             .then(data =>{
+                alert('User created successfully');
                 addNewUser(data.user.uid);
             });
             setError('');
             router.replace('/(tabs)/home');
 
         } catch (e: any) {
-            if (e.code === 'auth/email-already-in-use') {
+            {/*if (e.code === 'auth/email-already-in-use') {
                 setError('Email is already in use');
             } else if (e.code === 'auth/network-request-failed') {
                 setError('Error with the network connection');
             } else {
                 setError('An error occurred retry later');
-            }
-
+            }*/}
+            setError(e.message);
+            
         }
-    }
+    };
     return (
         <GestureHandlerRootView >
             <SafeAreaView>

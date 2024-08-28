@@ -1,29 +1,30 @@
-import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Index from '.';  
+import index from './index'; // Replace '.' with the correct component path
+import useAuth from '../hooks/useAuth';
+// import { NavigationContainer } from '@react-navigation/native';
+import Register from './(welcome&auth)/register'; 
+import Login from './(welcome&auth)/login';
+
+import Home from './(tabs)/home';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import _authLayout from './(welcome&auth)/_layout';
 import TabsLayout from './(tabs)/_layout';
-import {vars} from '../variables';
-import { Slot } from 'expo-router';
-/*
-if(vars.isLogged){
-    return <TabsLayout />
-  }
-*/
+
+const Stack = createNativeStackNavigator();
+
 const RootLayout = () => {
-  
-  return (
-    <Slot name="index"/>
-  );
+  const { user } = useAuth; // Set a default empty object if useAuth returns undefined
+
+  if (user) {
+    return (
+      TabsLayout()
+    );
+  }
+  else {
+    return (
+      _authLayout()
+    );
+  }
 };
 
 export default RootLayout;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ff0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

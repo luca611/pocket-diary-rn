@@ -13,8 +13,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native';
 import Images from "../../assets/imgaes";
 
-const login = () => {
+const Login = () => {
   const [secure, setSecure] = React.useState(true);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   const toggleSecure = () => {
     setSecure(!secure);
@@ -29,13 +31,17 @@ const login = () => {
             <View style={styles.line} />
             <View style={styles.formContainer}>
               <Text style={styles.tip}>Email</Text>
-              <TextInput style={styles.input} placeholder="Email" />
+              <TextInput style={styles.input} 
+                placeholder="Email" 
+                onChangeText={(text) => setEmail(text)}
+              />
               <Text style={styles.tip}>Password</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   placeholder="Password"
                   secureTextEntry={secure}
+                  onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity
                   onPress={toggleSecure}
@@ -50,7 +56,7 @@ const login = () => {
                 <Text style={styles.buttonText}>Sign in</Text>
               </TouchableOpacity>
               {/* Sign up button */}
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={() => router.replace('./register')}>
                 <Text style={styles.buttonText}>Sign up</Text>
               </TouchableOpacity>
             </View>
@@ -61,7 +67,7 @@ const login = () => {
   );
 }
 
-export default login
+export default Login
 
 const styles = StyleSheet.create({
   container: {

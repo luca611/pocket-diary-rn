@@ -12,15 +12,34 @@ import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native';
 import Images from "../../assets/imgaes";
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/config/firebase'
 
 const Login = () => {
   const [secure, setSecure] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
 
   const toggleSecure = () => {
     setSecure(!secure);
   };
+  
+  const handleSubmit = async () => {
+    try {
+        console.log(email, password);
+        await signInWithEmailAndPassword(auth, email, password);
+        router.replace('/(tabs)/home');
+    } catch (e: any) {
+      if (e.code === 'auth/email-already-in-use') {
+        setError('Email is already in use');
+      } else if (e.code === 'auth/network-request-failed') {
+        setError('Error with the network connection');
+      } else {
+        setError('An error occurred, please retry later');
+      }
+    }
+  }
 
   return (
     <GestureHandlerRootView >
@@ -33,6 +52,7 @@ const Login = () => {
               <Text style={styles.tip}>Email</Text>
               <TextInput style={styles.input} 
                 placeholder="Email" 
+                value={email}
                 onChangeText={(text) => setEmail(text)}
               />
               <Text style={styles.tip}>Password</Text>
@@ -41,6 +61,7 @@ const Login = () => {
                   style={styles.passwordInput}
                   placeholder="Password"
                   secureTextEntry={secure}
+                  value={password}
                   onChangeText={(text) => setPassword(text)}
                 />
                 <TouchableOpacity
@@ -50,9 +71,10 @@ const Login = () => {
                 </TouchableOpacity>
               </View>
             </View>
+            <Text style={styles.error}>{error}</Text>
             <View style={styles.buttonsContainer}>
               {/* Sign in button (database check and if found go on*/}
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Sign in</Text>
               </TouchableOpacity>
               {/* Sign up button */}
@@ -162,6 +184,12 @@ const styles = StyleSheet.create({
   switch:{
     width:35,
     height:35,
+  },
+  error: {
+      color: '#C14D4D',
+      fontSize: 15,
+      fontWeight: 'bold',
+      textAlign: 'center',
   }
 
 })

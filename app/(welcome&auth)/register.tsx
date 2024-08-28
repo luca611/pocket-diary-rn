@@ -12,17 +12,54 @@ import { router } from 'expo-router'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native';
 import Images from "../../assets/imgaes";
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../../config/firebase';
+import { addNewUser } from '../../api/usersApi';
 
 const Register = () => {
     const [secure, setSecure] = React.useState(true);
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [error, setError] = React.useState('');
 
     const toggleSecure = () => {
         setSecure(!secure);
     };
 
+    const handleSubmit = async () => {
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+        if (password.length < 5) {
+            setError('Password must be at least 5 characters');
+            return;
+        }
+        if (!email) {
+            setError('Email is required');
+            return;
+        }
+
+        try {
+            await createUserWithEmailAndPassword(auth, email, password)
+            .then(data =>{
+                addNewUser(data.user.uid);
+            });
+            setError('');
+            router.replace('/(tabs)/home');
+
+        } catch (e: any) {
+            if (e.code === 'auth/email-already-in-use') {
+                setError('Email is already in use');
+            } else if (e.code === 'auth/network-request-failed') {
+                setError('Error with the network connection');
+            } else {
+                setError('An error occurred retry later');
+            }
+
+        }
+    }
     return (
         <GestureHandlerRootView >
             <SafeAreaView>
@@ -32,16 +69,18 @@ const Register = () => {
                         <View style={styles.line} />
                         <View style={styles.formContainer}>
                             <Text style={styles.tip}>Email</Text>
-                            <TextInput style={styles.input} 
+                            <TextInput style={styles.input}
                                 placeholder="Email"
+                                value={email}
                                 onChangeText={(text) => setEmail(text)}
-                             />
+                            />
                             <Text style={styles.tip}>Password</Text>
                             <View style={styles.passwordContainer}>
                                 <TextInput
                                     style={styles.passwordInput}
                                     placeholder="Password"
                                     secureTextEntry={secure}
+                                    value={password}
                                     onChangeText={(text) => setPassword(text)}
                                 />
                                 <TouchableOpacity
@@ -56,6 +95,7 @@ const Register = () => {
                                     style={styles.passwordInput}
                                     placeholder="Password"
                                     secureTextEntry={secure}
+                                    value={confirmPassword}
                                     onChangeText={(text) => setConfirmPassword(text)}
                                 />
                                 <TouchableOpacity
@@ -64,14 +104,15 @@ const Register = () => {
                                     <Image source={secure ? Images.show : Images.hide} style={styles.switch} />
                                 </TouchableOpacity>
                             </View>
+                            <Text style={styles.error}>{error}</Text>
                         </View>
                         <View style={styles.buttonsContainer}>
                             {/* Sign up button checks that the password is good to be used and email also and add the credentials to the db*/}
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                                 <Text style={styles.buttonText}>Sign up</Text>
                             </TouchableOpacity>
                             {/* Sign up button */}
-                            <TouchableOpacity style={styles.button} onPress={() => router.replace('./login')}>
+                            <TouchableOpacity style={styles.button} onPress={() => router.replace('./Login')}>
                                 <Text style={styles.buttonText}>Sign in</Text>
                             </TouchableOpacity>
                         </View>
@@ -177,6 +218,12 @@ const styles = StyleSheet.create({
     switch: {
         width: 35,
         height: 35,
+    },
+    error: {
+        color: '#C14D4D',
+        fontSize: 15,
+        fontWeight: 'bold',
+        textAlign: 'center',
     }
 
 })

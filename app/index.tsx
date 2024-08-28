@@ -18,7 +18,7 @@ export default function Index() {
       <View style={styles.buttonsContainer}>
 
         {/* Sign in button */}
-        <TouchableOpacity style={styles.button} onPress={() => router.replace('./login')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.replace('./Login')}>
           <Text style={styles.buttonText}>Sign in</Text>
         </TouchableOpacity>
 
